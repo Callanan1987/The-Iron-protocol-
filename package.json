@@ -1,0 +1,27 @@
+{
+  "name": "iron-protocol-pwa",
+  "version": "1.0.0",
+  "description": "Elite fitness training system with 31 programs and 170 exercise database",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "deploy": "git push origin main"
+  },
+  "keywords": [
+    "fitness",
+    "training",
+    "workout",
+    "strength",
+    "hypertrophy",
+    "pwa",
+    "progressive-web-app"
+  ],
+  "author": "IRON PROTOCOL™",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/iron-protocol-pwa"
+  },
+  "homepage": "https://github.com/yourusername/iron-protocol-pwa#readme"
+}

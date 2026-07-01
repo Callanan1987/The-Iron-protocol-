@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00D9FF">
+<title>1RM Calculator - IRON PROTOCOL™</title>
+<link rel="manifest" href="data:application/json,{\"name\":\"1RM Calculator\",\"short_name\":\"1RM\",\"display\":\"standalone\",\"theme_color\":\"#00D9FF\"}">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wght@400;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+html,body{height:100%;width:100%}
+
+body{
+background:linear-gradient(135deg,#0a0a0a,#1a1a2e);
+color:#fff;
+font-family:'Archivo',sans-serif;
+overflow-x:hidden;
+}
+
+.container{
+max-width:480px;
+margin:0 auto;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+background:linear-gradient(180deg,#0f0f0f,#1a1a2e);
+box-shadow:0 0 60px rgba(0,191,255,.3);
+}
+
+.header{
+background:linear-gradient(90deg,#0a0a0a,#1a1a2e);
+border-bottom:2px solid #00D9FF;
+padding:16px;
+text-align:center;
+box-shadow:0 4px 20px rgba(0,217,255,.2);
+}
+
+.header h1{
+font-family:'Space Mono';
+color:#00D9FF;
+font-size:18px;
+text-transform:uppercase;
+letter-spacing:2px;
+text-shadow:0 0 10px rgba(0,217,255,.4);
+margin-bottom:4px;
+}
+
+.header p{
+font-size:10px;
+color:#888;
+letter-spacing:1px;
+}
+
+.content{
+flex:1;
+padding:16px;
+overflow-y:auto;
+}
+
+.card{
+background:linear-gradient(145deg,rgba(20,20,40,0.8),rgba(10,10,20,0.6));
+border:1px solid rgba(0,217,255,.25);
+border-radius:12px;
+padding:16px;
+margin-bottom:16px;
+box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(0,217,255,.1);
+}
+
+.section-title{
+font-family:'Space Mono';
+color:#00D9FF;
+font-size:12px;
+font-weight:bold;
+text-transform:uppercase;
+letter-spacing:1.5px;
+margin-bottom:12px;
+}
+
+.input-group{
+margin-bottom:12px;
+}
+
+label{
+font-size:9px;
+color:#888;
+display:block;
+margin-bottom:6px;
+text-transform:uppercase;
+letter-spacing:.5px;
+font-weight:bold;
+font-family:'Space Mono';
+}
+
+input,select{
+width:100%;
+padding:12px;
+background:rgba(20,20,40,.8);
+border:1px solid rgba(0,217,255,.3);
+color:#fff;
+border-radius:8px;
+font-size:12px;
+margin-bottom:8px;
+font-family:'Archivo';
+transition:all .2s;
+}
+
+input:focus,select:focus{
+outline:0;
+border-color:#00D9FF;
+background:rgba(0,217,255,.1);
+box-shadow:0 0 10px rgba(0,217,255,.2);
+}
+
+.grid-2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+}
+
+.grid-2 input{
+margin-bottom:0;
+}
+
+.btn{
+padding:12px 16px;
+background:linear-gradient(135deg,#00D9FF,#00BFFF);
+color:#000;
+border:0;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+font-size:12px;
+width:100%;
+margin-bottom:8px;
+transition:all .3s;
+text-transform:uppercase;
+letter-spacing:.5px;
+font-family:'Space Mono';
+box-shadow:0 4px 15px rgba(0,217,255,.3);
+text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+
+.btn:active{
+transform:scale(.95);
+box-shadow:0 2px 8px rgba(0,217,255,.4);
+}
+
+.btn-sec{
+background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(0,191,255,.1));
+border:1.5px solid #00D9FF;
+color:#00D9FF;
+box-shadow:0 4px 12px rgba(0,217,255,.15);
+}
+
+.btn-sec:active{
+background:rgba(0,217,255,.2);
+box-shadow:0 2px 8px rgba(0,217,255,.25);
+}
+
+.results{
+background:linear-gradient(135deg,rgba(0,217,255,.12),rgba(0,191,255,.06));
+border:1px solid rgba(0,217,255,.3);
+border-radius:10px;
+padding:14px;
+margin-top:12px;
+display:none;
+}
+
+.results.active{
+display:block;
+}
+
+.result-item{
+background:rgba(0,217,255,.05);
+padding:10px;
+margin-bottom:8px;
+border-left:3px solid rgba(0,217,255,.3);
+border-radius:4px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.result-label{
+font-size:9px;
+color:#888;
+font-family:'Space Mono';
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
+.result-value{
+font-size:16px;
+font-weight:bold;
+color:#00D9FF;
+font-family:'Space Mono';
+}
+
+.chart-container{
+margin-top:16px;
+background:rgba(0,217,255,.05);
+border:1px solid rgba(0,217,255,.2);
+border-radius:8px;
+padding:12px;
+}
+
+.comparison-bars{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.bar-item{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.bar-label{
+font-size:8px;
+color:#888;
+min-width:45px;
+font-family:'Space Mono';
+text-transform:uppercase;
+}
+
+.bar{
+flex:1;
+height:24px;
+background:linear-gradient(90deg,#00D9FF,#00BFFF);
+border-radius:4px;
+position:relative;
+box-shadow:0 2px 8px rgba(0,217,255,.3);
+display:flex;
+align-items:center;
+justify-content:flex-end;
+padding-right:8px;
+}
+
+.bar-value{
+font-size:8px;
+color:#000;
+font-weight:bold;
+font-family:'Space Mono';
+text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:8px;
+margin-top:12px;
+}
+
+.stat-box{
+background:rgba(0,217,255,.08);
+border:1px solid rgba(0,217,255,.2);
+padding:10px;
+border-radius:6px;
+text-align:center;
+}
+
+.stat-num{
+font-size:18px;
+font-weight:bold;
+color:#00D9FF;
+font-family:'Space Mono';
+}
+
+.stat-label{
+font-size:8px;
+color:#888;
+margin-top:4px;
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
+.tab-buttons{
+display:flex;
+gap:4px;
+margin-bottom:12px;
+flex-wrap:wrap;
+}
+
+.tab-btn{
+padding:8px 12px;
+background:rgba(0,217,255,.1);
+border:1px solid rgba(0,217,255,.2);
+color:#00D9FF;
+border-radius:6px;
+font-size:9px;
+cursor:pointer;
+font-family:'Space Mono';
+text-transform:uppercase;
+transition:all .2s;
+}
+
+.tab-btn.active{
+background:linear-gradient(135deg,#00D9FF,#00BFFF);
+color:#000;
+border-color:#00D9FF;
+font-weight:bold;
+}
+
+.info-box{
+background:rgba(0,217,255,.08);
+border-left:3px solid #00D9FF;
+padding:10px;
+margin-bottom:12px;
+border-radius:6px;
+font-size:9px;
+color:#aaa;
+line-height:1.4;
+}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:rgba(0,217,255,.05)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#00D9FF,#00BFFF);border-radius:3px;box-shadow:0 0 10px rgba(0,217,255,.3)}
+
+.footer{
+padding:12px 16px;
+text-align:center;
+font-size:8px;
+color:#666;
+border-top:1px solid rgba(0,217,255,.1);
+margin-top:auto;
+}
+
+@media (max-height: 600px){
+.content{padding:12px}
+.card{margin-bottom:12px;padding:12px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<h1>⚡ 1RM Calculator</h1>
+<p>Estimate Your One-Rep Max</p>
+</div>
+
+<div class="content">
+
+<div class="card">
+<div class="section-title">Workout Details</div>
+<div class="input-group">
+<label>Exercise</label>
+<input type="text" id="exercise" placeholder="e.g., Bench Press" value="Bench Press">
+</div>
+<div class="grid-2">
+<div class="input-group">
+<label>Weight (kg)</label>
+<input type="number" id="weight" placeholder="100" value="100" min="0" step="0.5">
+</div>
+<div class="input-group">
+<label>Reps</label>
+<input type="number" id="reps" placeholder="5" value="5" min="1" max="30" step="1">
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="section-title">Calculation Methods</div>
+<div class="info-box">
+Select which formulas to calculate. Different methods work better for different rep ranges.
+</div>
+<div class="tab-buttons">
+<button class="tab-btn active" onclick="toggleMethod(this, 'epley')">Epley</button>
+<button class="tab-btn" onclick="toggleMethod(this, 'brzycki')">Brzycki</button>
+<button class="tab-btn" onclick="toggleMethod(this, 'lombardi')">Lombardi</button>
+<button class="tab-btn" onclick="toggleMethod(this, 'mayhew')">Mayhew</button>
+<button class="tab-btn" onclick="toggleMethod(this, 'landers')">Landers</button>
+<button class="tab-btn" onclick="toggleMethod(this, 'oconner')">O'Conner</button>
+<button class="tab-btn" onclick="toggleMethod(this, 'wathan')">Wathan</button>
+</div>
+<button class="btn" onclick="calculate()">📊 Calculate 1RM</button>
+<button class="btn btn-sec" onclick="clearAll()">Clear</button>
+</div>
+
+<div class="card results" id="results">
+<div class="section-title">Your Estimated 1RM</div>
+
+<div class="results-details">
+<div class="result-item">
+<div class="result-label">Exercise</div>
+<div class="result-value" id="result-exercise">-</div>
+</div>
+<div class="result-item">
+<div class="result-label">Input</div>
+<div class="result-value" id="result-input">-</div>
+</div>
+<div class="result-item">
+<div class="result-label">Average 1RM</div>
+<div class="result-value" id="result-avg">-</div>
+</div>
+</div>
+
+<div class="stats-grid" id="stats-grid"></div>
+
+<div class="chart-container">
+<div style="font-size:10px;color:#00D9FF;font-weight:bold;margin-bottom:8px;font-family:'Space Mono';text-transform:uppercase;letter-spacing:1px">Formula Comparison</div>
+<div class="comparison-bars" id="comparison-bars"></div>
+</div>
+
+<div style="margin-top:12px;padding:10px;background:rgba(0,217,255,.05);border-radius:6px;font-size:8px;color:#888;line-height:1.5">
+<strong style="color:#00D9FF">💡 Tips:</strong><br>
+• Epley: Best for 1-10 reps<br>
+• Brzycki: Best for 2-10 reps<br>
+• Lombardi: Best for high reps (15+)<br>
+• Use average for conservative estimate
+</div>
+</div>
+
+</div>
+
+<div class="footer">
+1RM Calculator • 7 Professional Formulas • IRON PROTOCOL™
+</div>
+
+</div>
+
+<script>
+// Calculator state
+const activeMethods = {
+  epley: true,
+  brzycki: true,
+  lombardi: true,
+  mayhew: true,
+  landers: true,
+  oconner: true,
+  wathan: true
+};
+
+// 1RM Formulas
+const formulas = {
+  epley: (w, r) => w * (1 + r / 30),
+  brzycki: (w, r) => w / (1.0278 - 0.0278 * r),
+  lombardi: (w, r) => w * Math.pow(r, 0.1),
+  mayhew: (w, r) => 100 * w / (48.8 + 53.8 * Math.exp(-0.075 * r)),
+  landers: (w, r) => 100 * w / (101.3 - 2.67123 * r),
+  oconner: (w, r) => w * (1 + r / 40),
+  wathan: (w, r) => 100 * w / (48.8 + 53.8 * Math.exp(-0.075 * r))
+};
+
+const formulaNames = {
+  epley: 'Epley',
+  brzycki: 'Brzycki',
+  lombardi: 'Lombardi',
+  mayhew: 'Mayhew',
+  landers: 'Landers',
+  oconner: "O'Conner",
+  wathan: 'Wathan'
+};
+
+function toggleMethod(btn, method) {
+  activeMethods[method] = !activeMethods[method];
+  btn.classList.toggle('active');
+}
+
+function calculate() {
+  const weight = parseFloat(document.getElementById('weight').value);
+  const reps = parseInt(document.getElementById('reps').value);
+  const exercise = document.getElementById('exercise').value;
+
+  if (!weight || !reps || weight <= 0 || reps <= 0) {
+    alert('Please enter valid weight and reps');
+    return;
+  }
+
+  // Calculate 1RM for active methods
+  const results = {};
+  let sum = 0;
+  let count = 0;
+
+  Object.entries(activeMethods).forEach(([method, active]) => {
+    if (active && formulas[method]) {
+      const oneRM = formulas[method](weight, reps);
+      results[method] = Math.round(oneRM * 10) / 10;
+      sum += oneRM;
+      count++;
+    }
+  });
+
+  if (count === 0) {
+    alert('Select at least one calculation method');
+    return;
+  }
+
+  const average = Math.round((sum / count) * 10) / 10;
+  const min = Math.min(...Object.values(results));
+  const max = Math.max(...Object.values(results));
+
+  // Display results
+  document.getElementById('result-exercise').textContent = exercise;
+  document.getElementById('result-input').textContent = `${weight}kg × ${reps}`;
+  document.getElementById('result-avg').textContent = `${average}kg`;
+
+  // Build stats grid
+  let statsHtml = '';
+  statsHtml += `<div class="stat-box"><div class="stat-num">${min}kg</div><div class="stat-label">Conservative</div></div>`;
+  statsHtml += `<div class="stat-box"><div class="stat-num">${average}kg</div><div class="stat-label">Average</div></div>`;
+  statsHtml += `<div class="stat-box"><div class="stat-num">${max}kg</div><div class="stat-label">Optimistic</div></div>`;
+  statsHtml += `<div class="stat-box"><div class="stat-num">${count}</div><div class="stat-label">Methods</div></div>`;
+  document.getElementById('stats-grid').innerHTML = statsHtml;
+
+  // Build comparison chart
+  let chartHtml = '';
+  const maxValue = max * 1.1;
+  Object.entries(results).forEach(([method, value]) => {
+    const percent = (value / maxValue) * 100;
+    chartHtml += `
+      <div class="bar-item">
+        <div class="bar-label">${formulaNames[method]}</div>
+        <div class="bar" style="width:${percent}%">
+          <div class="bar-value">${value}kg</div>
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById('comparison-bars').innerHTML = chartHtml;
+
+  // Show results
+  document.getElementById('results').classList.add('active');
+}
+
+function clearAll() {
+  document.getElementById('exercise').value = '';
+  document.getElementById('weight').value = '';
+  document.getElementById('reps').value = '';
+  document.getElementById('results').classList.remove('active');
+}
+
+// Auto-calculate on input change
+document.getElementById('weight').addEventListener('change', calculate);
+document.getElementById('reps').addEventListener('change', calculate);
+
+// Initial calculation
+calculate();
+</script>
+
+</body>
+</html>

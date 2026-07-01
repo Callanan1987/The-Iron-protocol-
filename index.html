@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00D9FF">
+<meta name="description" content="IRON PROTOCOL™ - 31 Elite Programs + 1RM Calculator with 7 Methods">
+<title>IRON PROTOCOL™ - Elite Fitness System</title>
+<link rel="manifest" href="data:application/json,{\"name\":\"IRON PROTOCOL™\",\"short_name\":\"IRON\",\"description\":\"Elite Fitness Training System\",\"start_url\":\"/\",\"display\":\"standalone\",\"background_color\":\"#0a0a0a\",\"theme_color\":\"#00D9FF\",\"icons\":[{\"src\":\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%2300D9FF' width='192' height='192'/><text x='50%' y='50%' font-size='120' font-weight='bold' fill='%23000' text-anchor='middle' dominant-baseline='central'>⚡</text></svg>\",\"sizes\":\"192x192\",\"type\":\"image/svg+xml\",\"purpose\":\"any\"}]}">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wght@400;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+html,body{height:100%;width:100%}
+
+body{
+background:linear-gradient(135deg,#0a0a0a,#1a1a2e);
+color:#fff;
+font-family:'Archivo',sans-serif;
+overflow:hidden;
+-webkit-user-select:none;
+user-select:none;
+-webkit-touch-callout:none;
+}
+
+.frame{
+height:100vh;
+width:100%;
+max-width:480px;
+margin:0 auto;
+display:flex;
+flex-direction:column;
+background:linear-gradient(180deg,#0f0f0f,#1a1a2e);
+box-shadow:0 0 60px rgba(0,191,255,.3);
+position:relative;
+}
+
+.header{
+background:linear-gradient(90deg,#0a0a0a,#1a1a2e);
+border-bottom:2px solid #00D9FF;
+padding:14px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 20px rgba(0,217,255,.2);
+z-index:100;
+}
+
+.header-title{
+font-weight:bold;
+font-family:'Space Mono';
+font-size:14px;
+color:#00D9FF;
+text-transform:uppercase;
+letter-spacing:2px;
+text-shadow:0 0 10px rgba(0,217,255,.4);
+}
+
+.header-menu{
+cursor:pointer;
+font-size:16px;
+color:#00D9FF;
+font-weight:bold;
+}
+
+.content{
+flex:1;
+overflow-y:auto;
+padding:16px;
+scroll-behavior:smooth;
+}
+
+.section{display:none}
+.section.active{display:block}
+
+.page-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:16px;
+}
+
+.page-title{
+color:#00D9FF;
+font-size:14px;
+font-weight:bold;
+text-transform:uppercase;
+letter-spacing:1px;
+font-family:'Space Mono';
+}
+
+.hero{
+text-align:center;
+margin-bottom:20px;
+padding:20px;
+background:linear-gradient(135deg,rgba(0,217,255,.1),rgba(0,191,255,.05));
+border:1px solid rgba(0,217,255,.3);
+border-radius:12px;
+box-shadow:0 0 20px rgba(0,217,255,.15);
+}
+
+.hero h1{
+font-size:32px;
+font-weight:bold;
+font-family:'Space Mono';
+background:linear-gradient(135deg,#00D9FF,#00BFFF);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+margin-bottom:6px;
+}
+
+.hero p{
+font-size:11px;
+color:#aaa;
+letter-spacing:1px;
+}
+
+.card{
+background:linear-gradient(145deg,rgba(20,20,40,0.8),rgba(10,10,20,0.6));
+border:1px solid rgba(0,217,255,.25);
+border-radius:12px;
+padding:16px;
+margin-bottom:12px;
+box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(0,217,255,.1);
+}
+
+.card-title{
+font-family:'Space Mono';
+color:#00D9FF;
+margin-bottom:12px;
+font-size:12px;
+font-weight:bold;
+text-transform:uppercase;
+letter-spacing:1.5px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin:10px 0;
+}
+
+.stat{
+background:linear-gradient(135deg,rgba(0,217,255,.1),rgba(0,191,255,.05));
+border:1px solid rgba(0,217,255,.2);
+padding:10px;
+border-radius:8px;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,217,255,.1);
+}
+
+.stat-num{
+font-size:20px;
+font-weight:bold;
+color:#00D9FF;
+font-family:'Space Mono';
+}
+
+.stat-lab{
+font-size:8px;
+color:#888;
+margin-top:4px;
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
+.btn{
+padding:12px 16px;
+background:linear-gradient(135deg,#00D9FF,#00BFFF);
+color:#000;
+border:0;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+font-size:12px;
+width:100%;
+margin-bottom:8px;
+transition:all .3s;
+text-transform:uppercase;
+letter-spacing:.5px;
+font-family:'Space Mono';
+box-shadow:0 4px 15px rgba(0,217,255,.3);
+text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+
+.btn:active{
+transform:scale(.95);
+box-shadow:0 2px 8px rgba(0,217,255,.4);
+}
+
+.btn-sec{
+background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(0,191,255,.1));
+border:1.5px solid #00D9FF;
+color:#00D9FF;
+padding:12px 16px;
+box-shadow:0 4px 12px rgba(0,217,255,.15);
+}
+
+.btn-sec:active{
+background:rgba(0,217,255,.2);
+box-shadow:0 2px 8px rgba(0,217,255,.25);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:8px;
+}
+
+.vault{
+background:linear-gradient(135deg,rgba(0,217,255,.12),rgba(0,191,255,.06));
+border:1px solid rgba(0,217,255,.3);
+border-radius:10px;
+padding:14px;
+cursor:pointer;
+text-align:center;
+font-size:10px;
+transition:all .3s;
+user-select:none;
+box-shadow:0 4px 15px rgba(0,217,255,.15);
+}
+
+.vault:active{
+background:rgba(0,217,255,.2);
+border-color:#00D9FF;
+transform:scale(.98);
+box-shadow:0 6px 20px rgba(0,217,255,.25);
+}
+
+.vault-name{
+font-weight:bold;
+color:#00D9FF;
+margin-bottom:6px;
+font-size:12px;
+line-height:1.3;
+font-family:'Space Mono';
+}
+
+.vault-goal{
+font-size:8px;
+color:#aaa;
+margin-bottom:6px;
+line-height:1.3;
+}
+
+.vault-id{
+font-size:7px;
+color:#666;
+font-family:'Space Mono';
+}
+
+.ex-item{
+background:linear-gradient(135deg,rgba(0,217,255,.08),rgba(0,191,255,.02));
+border:1px solid rgba(0,217,255,.2);
+border-radius:6px;
+padding:10px 12px;
+margin-bottom:4px;
+cursor:pointer;
+transition:all .2s;
+display:flex;
+align-items:center;
+justify-content:space-between;
+border-left:3px solid rgba(0,217,255,.3);
+}
+
+.ex-item:hover{
+background:rgba(0,217,255,.12);
+border-color:#00D9FF;
+transform:translateX(2px);
+box-shadow:0 2px 8px rgba(0,217,255,.1);
+}
+
+.ex-left{
+flex:1;
+display:flex;
+flex-direction:column;
+gap:2px;
+}
+
+.ex-name{
+font-weight:bold;
+color:#00D9FF;
+font-size:11px;
+font-family:'Space Mono';
+letter-spacing:.5px;
+text-transform:capitalize;
+}
+
+.ex-info{
+font-size:8px;
+color:#888;
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,.9);
+z-index:1000;
+align-items:flex-end;
+justify-content:center;
+}
+
+.modal.active{display:flex}
+
+.modal-sheet{
+background:linear-gradient(180deg,#0f0f1f,#1a1a2e);
+border-top:3px solid #00D9FF;
+border-radius:16px 16px 0 0;
+width:100%;
+max-height:85vh;
+overflow-y:auto;
+padding:20px;
+animation:slide .3s;
+box-shadow:0 -8px 32px rgba(0,217,255,.2);
+}
+
+@keyframes slide{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+.modal-handle{
+width:40px;
+height:4px;
+background:rgba(0,217,255,.4);
+border-radius:2px;
+margin:0 auto 16px;
+}
+
+.modal-ttl{
+font-weight:bold;
+color:#00D9FF;
+font-size:14px;
+margin-bottom:14px;
+text-transform:uppercase;
+letter-spacing:1.5px;
+font-family:'Space Mono';
+}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+background:rgba(20,20,40,.8);
+border:1px solid rgba(0,217,255,.3);
+color:#fff;
+border-radius:8px;
+font-size:11px;
+margin-bottom:10px;
+font-family:'Archivo',sans-serif;
+transition:all .2s;
+}
+
+input:focus,select:focus,textarea:focus{
+outline:0;
+border-color:#00D9FF;
+background:rgba(0,217,255,.1);
+box-shadow:0 0 10px rgba(0,217,255,.2);
+}
+
+.nav{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:3px;
+border-top:2px solid rgba(0,217,255,.2);
+padding:10px;
+background:linear-gradient(90deg,#0a0a0a,#1a1a2e);
+margin-top:auto;
+font-size:8px;
+box-shadow:0 -4px 15px rgba(0,0,0,.5);
+z-index:50;
+}
+
+.nav-item{
+padding:10px;
+text-align:center;
+cursor:pointer;
+color:#666;
+border-radius:6px;
+font-weight:600;
+transition:all .2s;
+border:0;
+background:0;
+margin:0;
+font-family:'Space Mono';
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
+.nav-item.active{
+color:#00D9FF;
+background:rgba(0,217,255,.15);
+font-weight:bold;
+box-shadow:0 0 10px rgba(0,217,255,.2);
+}
+
+.back-btn{
+width:70px;
+padding:8px;
+font-size:10px;
+margin:0;
+flex-shrink:0;
+}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:rgba(0,217,255,.05)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#00D9FF,#00BFFF);border-radius:3px;box-shadow:0 0 10px rgba(0,217,255,.3)}
+
+label{
+font-size:9px;
+color:#666;
+display:block;
+margin-bottom:6px;
+text-transform:uppercase;
+letter-spacing:.5px;
+font-weight:bold;
+font-family:'Space Mono';
+}
+
+.workout-display{
+background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(0,191,255,.08));
+border:1px solid rgba(0,217,255,.25);
+border-radius:10px;
+padding:14px;
+margin-bottom:12px;
+box-shadow:0 4px 15px rgba(0,217,255,.12);
+}
+
+.ex-detail{
+background:rgba(0,217,255,.08);
+padding:8px;
+border-radius:6px;
+margin:6px 0;
+font-size:9px;
+color:#00D9FF;
+font-family:'Space Mono';
+font-weight:bold;
+}
+
+.rm-result{
+background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(0,191,255,.08));
+border:1px solid rgba(0,217,255,.3);
+border-radius:8px;
+padding:12px;
+margin:8px 0;
+text-align:center;
+}
+
+.rm-value{
+font-size:24px;
+font-weight:bold;
+color:#00D9FF;
+font-family:'Space Mono';
+}
+
+.rm-label{
+font-size:9px;
+color:#888;
+margin-top:4px;
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
+.rm-method{
+font-size:8px;
+color:#666;
+margin-top:2px;
+}
+
+.tab-buttons{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:6px;
+margin-bottom:12px;
+}
+
+.tab-btn{
+padding:8px;
+font-size:9px;
+background:rgba(0,217,255,.1);
+border:1px solid rgba(0,217,255,.2);
+color:#00D9FF;
+border-radius:6px;
+cursor:pointer;
+transition:all .2s;
+font-weight:bold;
+font-family:'Space Mono';
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
+.tab-btn.active{
+background:linear-gradient(135deg,#00D9FF,#00BFFF);
+border-color:#00D9FF;
+color:#000;
+box-shadow:0 4px 12px rgba(0,217,255,.3);
+}
+
+.rm-comparison{
+display:grid;
+grid-template-columns:1fr;
+gap:6px;
+}
+
+.rm-item{
+background:rgba(0,217,255,.08);
+border-left:3px solid #00D9FF;
+padding:10px;
+border-radius:6px;
+font-size:9px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.rm-method-name{
+font-weight:bold;
+color:#00D9FF;
+font-family:'Space Mono';
+}
+
+.rm-method-value{
+font-weight:bold;
+color:#00D9FF;
+font-size:12px;
+font-family:'Space Mono';
+}
+</style>
+</head>
+<body>
+<div class="frame">
+<div class="header">
+<div class="header-title">⚡ IRON PROTOCOL™</div>
+<div class="header-menu" onclick="app.toggleMenu()">≡</div>
+</div>
+
+<div class="content" id="content">
+
+<!-- HOME -->
+<section id="home" class="section active">
+<div class="hero"><h1>IRON</h1><p>31 ELITE PROGRAMS • 1RM CALCULATOR • INTELLIGENCE DATABASE</p></div>
+<div class="card" id="no-prog">
+<div class="card-title">Welcome to Elite Training</div>
+<p style="font-size:10px;color:#aaa;margin-bottom:14px;line-height:1.4">12 Powerbuilding • 10 Strength • 10 Hypertrophy • 170 Exercises • 1RM Calculator</p>
+<button class="btn" onclick="app.nav('programs')">Browse Programs</button>
+<button class="btn btn-sec" onclick="app.nav('calculator')" style="margin-top:6px">1RM Calculator</button>
+<button class="btn btn-sec" onclick="app.nav('exercises')" style="margin-top:6px">Exercise Library</button>
+</div>
+<div class="card" id="active-prog" style="display:none">
+<div class="card-title">Active Program</div>
+<div id="prog-name" style="color:#00D9FF;font-weight:bold;margin-bottom:8px;font-size:13px;font-family:'Space Mono';text-transform:uppercase">-</div>
+<div id="prog-goal" style="font-size:9px;color:#aaa;margin-bottom:12px;line-height:1.4">-</div>
+<div class="stats">
+<div class="stat"><div class="stat-num" id="pw">1</div><div class="stat-lab">Week</div></div>
+<div class="stat"><div class="stat-num" id="pd">1</div><div class="stat-lab">Day</div></div>
+<div class="stat"><div class="stat-num" id="pdn">0</div><div class="stat-lab">Done</div></div>
+<div class="stat"><div class="stat-num" id="ppc">0%</div><div class="stat-lab">Progress</div></div>
+</div>
+<div style="width:100%;height:6px;background:rgba(0,217,255,.1);margin:8px 0;border-radius:3px;overflow:hidden;border:1px solid rgba(0,217,255,.2)">
+<div id="pb" style="height:100%;width:0%;background:linear-gradient(90deg,#00D9FF,#00BFFF);box-shadow:0 0 10px rgba(0,217,255,.5)"></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+<button class="btn" onclick="app.nav('workout')">▶ Start</button>
+<button class="btn btn-sec" onclick="app.menu()">Menu</button>
+</div>
+</div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs" class="section">
+<div class="page-header"><div class="page-title">31 Programs</div><button class="btn btn-sec back-btn" onclick="app.nav('home')">← Back</button></div>
+<div class="card">
+<div style="font-size:11px;color:#00D9FF;margin:12px 0;text-align:center;font-weight:bold;letter-spacing:1px">POWERBUILDING (12) | STRENGTH (10) | HYPERTROPHY (10)</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<button class="btn btn-sec" style="flex:1;padding:10px;font-size:10px;margin:0" onclick="app.filterCat('PB')">PB</button>
+<button class="btn btn-sec" style="flex:1;padding:10px;font-size:10px;margin:0" onclick="app.filterCat('SV')">SV</button>
+<button class="btn btn-sec" style="flex:1;padding:10px;font-size:10px;margin:0" onclick="app.filterCat('HV')">HV</button>
+</div>
+<div id="prog-grid-all" class="grid"></div>
+</div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calculator" class="section">
+<div class="page-header"><div class="page-title">1RM Calculator</div><button class="btn btn-sec back-btn" onclick="app.nav('home')">← Back</button></div>
+<div class="card">
+<div class="card-title">Calculate Your One Rep Max</div>
+<div class="tab-buttons">
+<button class="tab-btn active" onclick="app.switchCalcTab('single')">Single Method</button>
+<button class="tab-btn" onclick="app.switchCalcTab('compare')">Compare All</button>
+</div>
+
+<div id="calc-single">
+<label>Exercise</label>
+<input type="text" id="ex-name" placeholder="e.g., Bench Press" style="margin-bottom:10px">
+
+<label>Weight Lifted (kg)</label>
+<input type="number" id="rm-weight" placeholder="Enter weight" min="0" max="500" style="margin-bottom:10px">
+
+<label>Reps Completed</label>
+<input type="number" id="rm-reps" placeholder="Enter reps" min="1" max="50" style="margin-bottom:10px">
+
+<label>Formula</label>
+<select id="rm-formula" style="margin-bottom:16px">
+<option value="epley">Epley (Most Popular)</option>
+<option value="brzycki">Brzycki</option>
+<option value="lombardini">Lombardini</option>
+<option value="mayhew">Mayhew</option>
+<option value="landers">Landers</option>
+<option value="oconner">O'Conner</option>
+<option value="wathan">Wathan</option>
+</select>
+
+<button class="btn" onclick="app.calculateSingleRM()">Calculate 1RM</button>
+
+<div id="single-result" style="display:none;margin-top:12px">
+<div class="rm-result">
+<div class="rm-value" id="result-value">-</div>
+<div class="rm-label" id="result-label">1RM Estimate</div>
+<div class="rm-method" id="result-method">-</div>
+</div>
+<div style="background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.2);padding:10px;border-radius:8px;margin-top:8px;font-size:8px;color:#aaa;line-height:1.6">
+<strong style="color:#00D9FF">Formula Details:</strong>
+<div id="formula-details" style="margin-top:6px"></div>
+</div>
+</div>
+</div>
+
+<div id="calc-compare" style="display:none">
+<label>Exercise</label>
+<input type="text" id="comp-ex-name" placeholder="e.g., Bench Press" style="margin-bottom:10px">
+
+<label>Weight Lifted (kg)</label>
+<input type="number" id="comp-rm-weight" placeholder="Enter weight" min="0" max="500" style="margin-bottom:10px">
+
+<label>Reps Completed</label>
+<input type="number" id="comp-rm-reps" placeholder="Enter reps" min="1" max="50" style="margin-bottom:16px">
+
+<button class="btn" onclick="app.calculateAllRM()">Compare All 7 Methods</button>
+
+<div id="compare-result" style="display:none;margin-top:12px">
+<div style="text-align:center;margin-bottom:12px">
+<div style="font-size:12px;color:#00D9FF;font-weight:bold;font-family:'Space Mono'">Average 1RM</div>
+<div style="font-size:28px;font-weight:bold;color:#00D9FF;font-family:'Space Mono'" id="avg-rm">-</div>
+<div style="font-size:8px;color:#888;margin-top:4px">Based on all 7 methods</div>
+</div>
+<div class="rm-comparison" id="methods-comparison"></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- EXERCISES -->
+<section id="exercises" class="section">
+<div class="page-header"><div class="page-title">170 Exercises</div><button class="btn btn-sec back-btn" onclick="app.nav('home')">← Back</button></div>
+<div class="card">
+<input type="text" id="search" placeholder="Search 170 exercises..." onkeyup="app.searchEx()" style="margin-bottom:10px">
+<div id="search-count" style="color:#00D9FF;font-size:9px;font-family:'Space Mono';padding:8px 0;text-align:center;border-bottom:1px solid rgba(0,217,255,.2)"></div>
+<div id="exlist" style="display:flex;flex-direction:column;gap:0"></div>
+</div>
+</section>
+
+<!-- WORKOUT -->
+<section id="workout" class="section">
+<div class="page-header"><div class="page-title">Workout</div><button class="btn btn-sec back-btn" onclick="app.nav('home')">← Back</button></div>
+<div class="workout-display">
+<div id="wtit" style="font-weight:bold;color:#00D9FF;font-size:14px;text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono'">Workout</div>
+<div id="wmeta" style="font-size:9px;color:#aaa;margin-top:4px">-</div>
+</div>
+<div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(0,217,255,.12),rgba(0,191,255,.06))">
+<div style="font-family:'Space Mono';color:#00D9FF;font-size:36px;margin:12px 0;font-weight:bold;text-shadow:0 0 10px rgba(0,217,255,.3)" id="timer">00:00</div>
+<div class="stats">
+<div class="stat"><div class="stat-num" id="sets-count">0</div><div class="stat-lab">Sets</div></div>
+<div class="stat"><div class="stat-num" id="vol-count">0kg</div><div class="stat-lab">Volume</div></div>
+</div>
+</div>
+<div id="exwl" style="flex:1;overflow-y:auto;margin-bottom:12px"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<button class="btn" onclick="app.completeWorkout()">✓ Complete</button>
+<button class="btn btn-sec" onclick="app.nav('home')">Home</button>
+</div>
+</section>
+
+<!-- PROGRESS -->
+<section id="progress" class="section">
+<div class="page-header"><div class="page-title">Progress</div><button class="btn btn-sec back-btn" onclick="app.nav('home')">← Back</button></div>
+<div class="card">
+<div class="card-title">Session History</div>
+<div id="prog-list" style="font-size:9px;color:#aaa;text-align:center;padding:20px">No sessions logged yet. Start a workout to track progress.</div>
+</div>
+</section>
+
+</div>
+
+<div class="nav">
+<div class="nav-item active" data-page="home" onclick="app.nav('home')">Home</div>
+<div class="nav-item" data-page="programs" onclick="app.nav('programs')">Programs</div>
+<div class="nav-item" data-page="calculator" onclick="app.nav('calculator')">1RM</div>
+<div class="nav-item" data-page="exercises" onclick="app.nav('exercises')">Exercises</div>
+<div class="nav-item" data-page="workout" onclick="app.nav('workout')">Workout</div>
+</div>
+
+</div>
+
+<!-- MODALS -->
+<div class="modal" id="prev">
+<div class="modal-sheet">
+<div class="modal-handle"></div>
+<div class="modal-ttl" id="ptit">Program</div>
+<div id="pbdy" style="max-height:400px;overflow-y:auto"></div>
+<button class="btn" onclick="app.activateProgram()" style="margin-top:12px">✓ Activate</button>
+<button class="btn btn-sec" onclick="app.closeModal('prev')">Close</button>
+</div>
+</div>
+
+<div class="modal" id="exmodal">
+<div class="modal-sheet">
+<div class="modal-handle"></div>
+<div class="modal-ttl" id="ex-title">Exercise</div>
+<div id="ex-content" style="max-height:500px;overflow-y:auto"></div>
+<button class="btn btn-sec" onclick="app.closeModal('exmodal')">Close</button>
+</div>
+</div>
+
+<div class="modal" id="menu">
+<div class="modal-sheet">
+<div class="modal-handle"></div>
+<div class="modal-ttl">Program Menu</div>
+<button class="btn" id="pbtn" onclick="app.pauseProg()" style="display:none">⏸ Pause</button>
+<button class="btn btn-sec" id="rbtn" onclick="app.resumeProg()" style="display:none">▶ Resume</button>
+<button class="btn btn-sec" id="dbtn" onclick="app.deactivateProg()" style="display:none">⊘ Deactivate</button>
+<button class="btn btn-sec" onclick="app.closeModal('menu')">Close</button>
+</div>
+</div>
+
+<script>
+// 1RM CALCULATION FORMULAS
+const rmCalculator={
+epley:(w,r)=>w*(1+r/30),
+brzycki:(w,r)=>w/(1.0278-0.0278*r),
+lombardini:(w,r)=>w*100/(101.3-2.67123*r),
+mayhew:(w,r)=>w*100/(52.2+41.9*Math.exp(-0.055*r)),
+landers:(w,r)=>w*100/(101.3-2.67123*r),
+oconner:(w,r)=>w*(1+r/40),
+wathan:(w,r)=>w*100/(48.8+53.8*Math.exp(-0.075*r))
+};
+
+const rmFormulas={
+epley:{name:'Epley',formula:'1RM = Weight × (1 + Reps/30)',desc:'Most commonly used formula'},
+brzycki:{name:'Brzycki',formula:'1RM = Weight ÷ (1.0278 - 0.0278 × Reps)',desc:'Accurate for lower reps'},
+lombardini:{name:'Lombardini',formula:'1RM = Weight × 100 ÷ (101.3 - 2.67123 × Reps)',desc:'Adjusted for different rep ranges'},
+mayhew:{name:'Mayhew',formula:'1RM = Weight × 100 ÷ (52.2 + 41.9 × e^(-0.055 × Reps))',desc:'Exponential calculation'},
+landers:{name:'Landers',formula:'1RM = Weight × 100 ÷ (101.3 - 2.67123 × Reps)',desc:'Similar to Lombardini'},
+oconner:{name:"O'Conner",formula:'1RM = Weight × (1 + Reps/40)',desc:'Simple linear method'},
+wathan:{name:'Wathan',formula:'1RM = Weight × 100 ÷ (48.8 + 53.8 × e^(-0.075 × Reps))',desc:'Refined exponential method'}
+};
+
+// EXERCISE DATABASE
+const EX_DB={
+'EX001':{name:'Bench Press',primary:'Chest',secondary:'Triceps, Anterior Delts',category:'Flat Press',goal:'Strength',techniques:['Top Set + Back-Off','Cluster Sets','Paused Reps'],fatigue:4,skill:5,recovery:'High'},
+'EX002':{name:'Incline Barbell',primary:'Chest',secondary:'Anterior Delts, Triceps',category:'Incline Press',goal:'Strength',techniques:['Top Set + Back-Off','Cluster Sets','Paused Reps'],fatigue:4,skill:5,recovery:'High'},
+'EX003':{name:'Decline Barbell',primary:'Chest',secondary:'Triceps',category:'Decline Press',goal:'Strength',techniques:['Top Set + Back-Off','Cluster Sets','Paused Reps'],fatigue:4,skill:4,recovery:'High'},
+'EX004':{name:'Close Grip Bench',primary:'Triceps',secondary:'Chest, Anterior Delts',category:'Flat Press',goal:'Strength',techniques:['Top Set + Back-Off','Cluster Sets','Paused Reps'],fatigue:4,skill:4,recovery:'High'},
+'EX005':{name:'Dumbbell Bench',primary:'Chest',secondary:'Triceps, Anterior Delts',category:'Dumbbell Press',goal:'Hypertrophy',techniques:['Reverse Pyramid','Paused Reps','Constant Tension'],fatigue:4,skill:4,recovery:'Moderate'},
+'EX006':{name:'Overhead Press',primary:'Anterior Delts, Triceps',secondary:'Chest, Upper Back',category:'Overhead Press',goal:'Strength',techniques:['Top Set + Back-Off','Cluster Sets','Paused Reps'],fatigue:4,skill:5,recovery:'High'},
+'EX007':{name:'Push Press',primary:'Anterior Delts, Triceps',secondary:'Core, Quadriceps',category:'Dynamic Overhead',goal:'Power',techniques:['Cluster Sets','Alternating EMOM','Explosive Reps'],fatigue:4,skill:5,recovery:'Moderate'},
+'EX008':{name:'Dumbbell Press',primary:'Anterior Delts & Triceps',secondary:'Clavicular Chest, Upper Back',category:'Dumbbell Press',goal:'Strength',techniques:['Reverse Pyramid','Paused Reps','Top Set + Back-Off'],fatigue:4,skill:4,recovery:'Moderate'},
+'EX009':{name:'Barbell Row',primary:'Lats & Middle Back',secondary:'Biceps, Rear Delts',category:'Horizontal Rows',goal:'Strength',techniques:['Top Set + Back-Off','Reverse Pyramid','Cluster Sets'],fatigue:4,skill:4,recovery:'High'},
+'EX010':{name:'Deadlift',primary:'Erector Spinae',secondary:'Glutes, Hamstrings, Lats',category:'Deadlift Variations',goal:'Strength',techniques:['Top Set + Back-Off','Cluster Sets','Alternating EMOM'],fatigue:5,skill:5,recovery:'Very High'},
+'EX011':{name:'Back Squat',primary:'Quadriceps',secondary:'Glutes, Hamstrings, Adductors',category:'Squat Variations',goal:'Strength',techniques:['Top Set + Back-Off','Cluster Sets','Alternating EMOM'],fatigue:5,skill:5,recovery:'Very High'},
+'EX012':{name:'Front Squat',primary:'Quadriceps',secondary:'Glutes, Adductors, Erector Spinae',category:'Squat Variations',goal:'Strength',techniques:['Top Set + Back-Off','Cluster Sets','Alternating EMOM'],fatigue:5,skill:5,recovery:'Very High'},
+'EX013':{name:'Leg Press',primary:'Quadriceps',secondary:'Glutes, Hamstrings, Adductors',category:'Leg Press',goal:'Hypertrophy',techniques:['Reverse Pyramid','Rest-Pause','Triple Drop Set'],fatigue:4,skill:2,recovery:'Moderate'},
+'EX014':{name:'Lat Pulldown',primary:'Latissimus Dorsi',secondary:'Biceps, Rear Delts',category:'Vertical Pulls',goal:'Hypertrophy',techniques:['Reverse Pyramid','Constant Tension','Peak Contraction'],fatigue:4,skill:2,recovery:'Low'},
+'EX015':{name:'Pull Up',primary:'Latissimus Dorsi',secondary:'Biceps, Rear Delts, Upper Back',category:'Vertical Pulls',goal:'Strength',techniques:['Top Set + Back-Off','Reverse Pyramid','Cluster Sets'],fatigue:4,skill:4,recovery:'Moderate'},
+'EX016':{name:'Chin Up',primary:'Latissimus Dorsi & Biceps',secondary:'Rear Delts, Upper Back',category:'Vertical Pulls',goal:'Strength',techniques:['Top Set + Back-Off','Reverse Pyramid','Cluster Sets'],fatigue:4,skill:4,recovery:'Moderate'},
+'EX017':{name:'Barbell Curl',primary:'Biceps',secondary:'Brachialis, Forearms',category:'Biceps (Barbell)',goal:'Strength',techniques:['Reverse Pyramid','Paused Reps','Top Set + Back-Off'],fatigue:3,skill:3,recovery:'Moderate'},
+'EX018':{name:'Dumbbell Curl',primary:'Biceps',secondary:'Brachialis, Forearms',category:'Biceps (Dumbbell)',goal:'Hypertrophy',techniques:['Reverse Pyramid','Paused Reps','Constant Tension'],fatigue:3,skill:3,recovery:'Low'},
+'EX019':{name:'Tricep Pushdown',primary:'Triceps',secondary:'Anconeus',category:'Triceps (Cable)',goal:'Hypertrophy',techniques:['Reverse Pyramid','Constant Tension','Peak Contraction'],fatigue:3,skill:2,recovery:'Low'},
+'EX020':{name:'Rope Pushdown',primary:'Triceps',secondary:'Anconeus',category:'Triceps (Cable)',goal:'Hypertrophy',techniques:['Reverse Pyramid','Constant Tension','Peak Contraction'],fatigue:3,skill:2,recovery:'Low'},
+'EX021':{name:'Lateral Raise',primary:'Lateral Deltoids',secondary:'Supraspinatus',category:'Lateral Delts',goal:'Hypertrophy',techniques:['Reverse Pyramid','Constant Tension','Peak Contraction'],fatigue:3,skill:3,recovery:'Low'},
+'EX022':{name:'Face Pull',primary:'Rear Deltoids & Teres Major',secondary:'Middle Back, Upper Back',category:'Rear Delts',goal:'Hypertrophy',techniques:['Constant Tension','Peak Contraction','Paused Reps'],fatigue:3,skill:2,recovery:'Low'},
+'EX023':{name:'Cable Fly',primary:'Chest',secondary:'Anterior Delts',category:'Fly Variations',goal:'Hypertrophy',techniques:['Reverse Pyramid','Rest-Pause','Constant Tension'],fatigue:3,skill:2,recovery:'Low'},
+'EX024':{name:'Pec Deck',primary:'Chest',secondary:'Anterior Delts',category:'Fly Variations',goal:'Hypertrophy',techniques:['Reverse Pyramid','Rest-Pause','Constant Tension'],fatigue:4,skill:2,recovery:'Low'},
+'EX025':{name:'Leg Extension',primary:'Quadriceps',secondary:'Rectus Femoris',category:'Quad Isolation',goal:'Hypertrophy',techniques:['Reverse Pyramid','Rest-Pause','Constant Tension'],fatigue:4,skill:2,recovery:'Low'},
+'EX026':{name:'Leg Curl',primary:'Hamstrings',secondary:'Gastrocnemius',category:'Hamstring Isolation',goal:'Hypertrophy',techniques:['Reverse Pyramid','Rest-Pause','Constant Tension'],fatigue:4,skill:2,recovery:'Low'},
+'EX027':{name:'Ab Wheel',primary:'Rectus Abdominis',secondary:'Transverse Abs, Obliques',category:'Flexion',goal:'Hypertrophy',techniques:['Reverse Pyramid','Paused Reps','Constant Tension'],fatigue:4,skill:4,recovery:'Moderate'},
+'EX028':{name:'Hanging Leg Raise',primary:'Rectus Abdominis',secondary:'Hip Flexors',category:'Leg Raise',goal:'Strength',techniques:['Reverse Pyramid','Paused Reps','Peak Contraction'],fatigue:4,skill:4,recovery:'Moderate'},
+'EX029':{name:'Cable Crunch',primary:'Rectus Abdominis',secondary:'Transverse Abs, Obliques',category:'Flexion',goal:'Hypertrophy',techniques:['Reverse Pyramid','Paused Reps','Constant Tension'],fatigue:3,skill:2,recovery:'Low'},
+'EX030':{name:'Pallof Press',primary:'Transverse Abs & Obliques',secondary:'Core Stabilizers',category:'Anti-Rotation',goal:'Stability',techniques:['Constant Tension','Peak Contraction','Paused Reps'],fatigue:3,skill:3,recovery:'Low'},
+};
+
+// 31 COMPLETE PROGRAMS
+const PROTS={
+// POWERBUILDING (12 PROGRAMS)
+'PB01':{name:'Powerbuilding Foundation',cat:'PB',goal:'Technical strength + hypertrophy base',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:6,rpe:8},{ex:'EX005',s:3,r:10,rpe:6},{ex:'EX023',s:3,r:12,rpe:5}],2:[{ex:'EX011',s:4,r:6,rpe:8},{ex:'EX002',s:3,r:8,rpe:7},{ex:'EX025',s:3,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:4,rpe:8},{ex:'EX009',s:3,r:8,rpe:7},{ex:'EX014',s:3,r:12,rpe:6}],4:[{ex:'EX006',s:4,r:6,rpe:8},{ex:'EX008',s:3,r:8,rpe:7},{ex:'EX021',s:3,r:12,rpe:6}]}},
+'PB02':{name:'Hybrid Strength',cat:'PB',goal:'Balanced strength & size',weeks:12,days:5,sessions:{1:[{ex:'EX001',s:5,r:5,rpe:9},{ex:'EX024',s:3,r:10,rpe:5}],2:[{ex:'EX011',s:5,r:5,rpe:9},{ex:'EX026',s:3,r:12,rpe:5}],3:[{ex:'EX010',s:5,r:3,rpe:9},{ex:'EX009',s:3,r:8,rpe:6}],4:[{ex:'EX006',s:4,r:6,rpe:8},{ex:'EX021',s:3,r:12,rpe:6}],5:[{ex:'EX017',s:3,r:8,rpe:7},{ex:'EX019',s:3,r:12,rpe:6}]}},
+'PB03':{name:'Strength Builder',cat:'PB',goal:'Raw strength development',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:5,r:4,rpe:9},{ex:'EX005',s:3,r:8,rpe:7}],2:[{ex:'EX011',s:5,r:4,rpe:9},{ex:'EX025',s:3,r:12,rpe:5}],3:[{ex:'EX010',s:5,r:3,rpe:9},{ex:'EX014',s:3,r:10,rpe:6}],4:[{ex:'EX006',s:5,r:4,rpe:9},{ex:'EX022',s:3,r:12,rpe:6}]}},
+'PB04':{name:'Physique Builder',cat:'PB',goal:'Maximum muscle gain',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:8,rpe:7},{ex:'EX024',s:4,r:12,rpe:6}],2:[{ex:'EX011',s:4,r:8,rpe:7},{ex:'EX026',s:4,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX009',s:4,r:8,rpe:7}],4:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX021',s:4,r:12,rpe:6}]}},
+'PB05':{name:'Bench Specialist',cat:'PB',goal:'Chest & pressing dominance',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:5,r:5,rpe:9},{ex:'EX002',s:4,r:6,rpe:8},{ex:'EX005',s:3,r:10,rpe:6}],2:[{ex:'EX004',s:4,r:6,rpe:8},{ex:'EX024',s:3,r:12,rpe:5}],3:[{ex:'EX010',s:4,r:4,rpe:8},{ex:'EX009',s:3,r:8,rpe:7}],4:[{ex:'EX006',s:4,r:6,rpe:8},{ex:'EX023',s:3,r:12,rpe:5}]}},
+'PB06':{name:'Squat Specialist',cat:'PB',goal:'Lower body mastery',weeks:12,days:4,sessions:{1:[{ex:'EX011',s:5,r:5,rpe:9},{ex:'EX012',s:4,r:6,rpe:8},{ex:'EX025',s:3,r:15,rpe:5}],2:[{ex:'EX013',s:4,r:8,rpe:7},{ex:'EX026',s:3,r:12,rpe:6}],3:[{ex:'EX010',s:4,r:4,rpe:8},{ex:'EX014',s:3,r:10,rpe:6}],4:[{ex:'EX006',s:4,r:6,rpe:8},{ex:'EX021',s:3,r:12,rpe:6}]}},
+'PB07':{name:'Deadlift Specialist',cat:'PB',goal:'Maximum pulling strength',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:6,rpe:8},{ex:'EX005',s:3,r:10,rpe:6}],2:[{ex:'EX011',s:4,r:6,rpe:8},{ex:'EX026',s:3,r:12,rpe:5}],3:[{ex:'EX010',s:5,r:3,rpe:9},{ex:'EX009',s:4,r:6,rpe:8},{ex:'EX014',s:3,r:12,rpe:5}],4:[{ex:'EX006',s:4,r:6,rpe:8},{ex:'EX022',s:3,r:12,rpe:6}]}},
+'PB08':{name:'Athletic PB',cat:'PB',goal:'Strength + power + size',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:6,rpe:8},{ex:'EX007',s:3,r:8,rpe:8}],2:[{ex:'EX011',s:4,r:6,rpe:8},{ex:'EX013',s:3,r:10,rpe:6}],3:[{ex:'EX010',s:4,r:4,rpe:8},{ex:'EX015',s:3,r:8,rpe:7}],4:[{ex:'EX006',s:4,r:6,rpe:8},{ex:'EX021',s:3,r:12,rpe:6}]}},
+'PB09':{name:'High Volume',cat:'PB',goal:'Metabolic stress training',weeks:12,days:5,sessions:{1:[{ex:'EX001',s:4,r:8,rpe:7},{ex:'EX024',s:3,r:15,rpe:5}],2:[{ex:'EX011',s:4,r:8,rpe:7},{ex:'EX026',s:4,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX014',s:3,r:12,rpe:6}],4:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX022',s:3,r:15,rpe:5}],5:[{ex:'EX017',s:3,r:10,rpe:6},{ex:'EX019',s:3,r:15,rpe:5}]}},
+'PB10':{name:'Offseason Mass',cat:'PB',goal:'Lean mass accumulation',weeks:12,days:5,sessions:{1:[{ex:'EX001',s:4,r:8,rpe:7},{ex:'EX005',s:3,r:12,rpe:6}],2:[{ex:'EX011',s:4,r:8,rpe:7},{ex:'EX025',s:4,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX009',s:3,r:8,rpe:6}],4:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX021',s:4,r:12,rpe:6}],5:[{ex:'EX014',s:3,r:12,rpe:6},{ex:'EX022',s:3,r:15,rpe:5}]}},
+'PB11':{name:'Strong & Jacked',cat:'PB',goal:'Elite strength + hypertrophy',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:5,r:5,rpe:9},{ex:'EX024',s:3,r:12,rpe:5}],2:[{ex:'EX011',s:5,r:5,rpe:9},{ex:'EX026',s:3,r:15,rpe:5}],3:[{ex:'EX010',s:5,r:3,rpe:9},{ex:'EX009',s:3,r:8,rpe:7}],4:[{ex:'EX006',s:5,r:5,rpe:9},{ex:'EX021',s:3,r:12,rpe:6}]}},
+'PB12':{name:'Apex',cat:'PB',goal:'Complete athletic development',weeks:16,days:5,sessions:{1:[{ex:'EX001',s:5,r:5,rpe:9},{ex:'EX007',s:3,r:6,rpe:8}],2:[{ex:'EX011',s:5,r:5,rpe:9},{ex:'EX013',s:3,r:10,rpe:6}],3:[{ex:'EX010',s:5,r:3,rpe:9},{ex:'EX015',s:3,r:8,rpe:7}],4:[{ex:'EX006',s:5,r:5,rpe:9},{ex:'EX022',s:3,r:12,rpe:6}],5:[{ex:'EX014',s:3,r:10,rpe:6},{ex:'EX017',s:3,r:8,rpe:7}]}},
+
+// STRENGTH (10 PROGRAMS)
+'SV01':{name:'Iron Forge',cat:'SV',goal:'Raw foundational strength',weeks:12,days:3,sessions:{1:[{ex:'EX001',s:5,r:3,rpe:9},{ex:'EX021',s:3,r:10,rpe:6}],2:[{ex:'EX011',s:5,r:3,rpe:9},{ex:'EX025',s:3,r:12,rpe:5}],3:[{ex:'EX010',s:5,r:2,rpe:9},{ex:'EX009',s:3,r:8,rpe:6}]}},
+'SV02':{name:'Iron Siege',cat:'SV',goal:'Compound strength focus',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:5,r:3,rpe:9},{ex:'EX005',s:3,r:6,rpe:7}],2:[{ex:'EX011',s:5,r:3,rpe:9},{ex:'EX026',s:3,r:10,rpe:6}],3:[{ex:'EX010',s:5,r:2,rpe:9},{ex:'EX014',s:3,r:8,rpe:6}],4:[{ex:'EX006',s:5,r:3,rpe:9},{ex:'EX022',s:3,r:10,rpe:5}]}},
+'SV03':{name:'Iron Matrix',cat:'SV',goal:'Structured strength progression',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:5,r:4,rpe:9},{ex:'EX024',s:2,r:8,rpe:6}],2:[{ex:'EX011',s:5,r:4,rpe:9},{ex:'EX025',s:2,r:12,rpe:5}],3:[{ex:'EX010',s:5,r:3,rpe:9},{ex:'EX009',s:3,r:6,rpe:7}],4:[{ex:'EX006',s:5,r:4,rpe:9},{ex:'EX021',s:2,r:10,rpe:5}]}},
+'SV04':{name:'Iron Frequency',cat:'SV',goal:'High frequency strength',weeks:12,days:3,sessions:{1:[{ex:'EX001',s:6,r:3,rpe:9},{ex:'EX023',s:2,r:10,rpe:5}],2:[{ex:'EX011',s:6,r:3,rpe:9},{ex:'EX026',s:2,r:10,rpe:5}],3:[{ex:'EX010',s:6,r:2,rpe:9},{ex:'EX014',s:2,r:8,rpe:6}]}},
+'SV05':{name:'Bench Authority',cat:'SV',goal:'Elite bench pressing',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:6,r:3,rpe:9},{ex:'EX002',s:4,r:5,rpe:8}],2:[{ex:'EX004',s:4,r:5,rpe:8},{ex:'EX024',s:2,r:10,rpe:5}],3:[{ex:'EX010',s:5,r:3,rpe:9},{ex:'EX009',s:3,r:6,rpe:7}],4:[{ex:'EX006',s:4,r:5,rpe:8},{ex:'EX022',s:3,r:10,rpe:5}]}},
+'SV06':{name:'Squat Authority',cat:'SV',goal:'Elite squat strength',weeks:12,days:4,sessions:{1:[{ex:'EX011',s:6,r:3,rpe:9},{ex:'EX012',s:4,r:4,rpe:8}],2:[{ex:'EX013',s:4,r:6,rpe:7},{ex:'EX026',s:2,r:10,rpe:5}],3:[{ex:'EX010',s:5,r:3,rpe:9},{ex:'EX014',s:3,r:8,rpe:6}],4:[{ex:'EX006',s:4,r:5,rpe:8},{ex:'EX021',s:2,r:10,rpe:5}]}},
+'SV07':{name:'Deadlift Brutality',cat:'SV',goal:'Maximum deadlift power',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:5,rpe:8},{ex:'EX005',s:2,r:8,rpe:6}],2:[{ex:'EX011',s:4,r:5,rpe:8},{ex:'EX026',s:2,r:10,rpe:5}],3:[{ex:'EX010',s:6,r:2,rpe:9},{ex:'EX009',s:4,r:5,rpe:8},{ex:'EX014',s:2,r:8,rpe:6}],4:[{ex:'EX006',s:4,r:5,rpe:8},{ex:'EX022',s:2,r:10,rpe:5}]}},
+'SV08':{name:'Iron Intensification',cat:'SV',goal:'High intensity technique work',weeks:12,days:5,sessions:{1:[{ex:'EX001',s:5,r:3,rpe:9}],2:[{ex:'EX011',s:5,r:3,rpe:9}],3:[{ex:'EX010',s:5,r:2,rpe:9}],4:[{ex:'EX006',s:5,r:3,rpe:9}],5:[{ex:'EX015',s:4,r:5,rpe:8}]}},
+'SV09':{name:'Iron Peak',cat:'SV',goal:'Peaking for maximal strength',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:5,r:2,rpe:9},{ex:'EX023',s:2,r:10,rpe:5}],2:[{ex:'EX011',s:5,r:2,rpe:9},{ex:'EX025',s:2,r:12,rpe:4}],3:[{ex:'EX010',s:5,r:1,rpe:9},{ex:'EX014',s:3,r:8,rpe:6}],4:[{ex:'EX006',s:5,r:2,rpe:9},{ex:'EX022',s:2,r:10,rpe:5}]}},
+'SV10':{name:'Iron Apex',cat:'SV',goal:'Ultimate strength development',weeks:16,days:5,sessions:{1:[{ex:'EX001',s:6,r:2,rpe:9}],2:[{ex:'EX011',s:6,r:2,rpe:9}],3:[{ex:'EX010',s:6,r:1,rpe:9}],4:[{ex:'EX006',s:6,r:2,rpe:9}],5:[{ex:'EX015',s:4,r:3,rpe:8}]}},
+
+// HYPERTROPHY (10 PROGRAMS)
+'HV01':{name:'Iron Ascension',cat:'HV',goal:'Hypertrophy foundation',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:8,rpe:7},{ex:'EX024',s:3,r:12,rpe:5}],2:[{ex:'EX011',s:4,r:8,rpe:7},{ex:'EX026',s:4,r:12,rpe:6}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX009',s:4,r:8,rpe:7}],4:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX021',s:4,r:12,rpe:6}]}},
+'HV02':{name:'Iron Growth',cat:'HV',goal:'Accelerated muscle gain',weeks:12,days:5,sessions:{1:[{ex:'EX001',s:4,r:8,rpe:7},{ex:'EX005',s:3,r:12,rpe:6}],2:[{ex:'EX011',s:4,r:8,rpe:7},{ex:'EX025',s:4,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX014',s:3,r:12,rpe:6}],4:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX022',s:3,r:15,rpe:5}],5:[{ex:'EX017',s:3,r:10,rpe:6},{ex:'EX019',s:3,r:15,rpe:5}]}},
+'HV03':{name:'Iron Mass',cat:'HV',goal:'Maximum volume training',weeks:12,days:6,sessions:{1:[{ex:'EX001',s:4,r:10,rpe:6},{ex:'EX024',s:3,r:15,rpe:5}],2:[{ex:'EX011',s:4,r:10,rpe:6},{ex:'EX026',s:4,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:8,rpe:6},{ex:'EX009',s:3,r:10,rpe:6}],4:[{ex:'EX006',s:4,r:10,rpe:6},{ex:'EX023',s:3,r:15,rpe:5}],5:[{ex:'EX014',s:3,r:12,rpe:6},{ex:'EX022',s:3,r:15,rpe:5}],6:[{ex:'EX017',s:3,r:12,rpe:6},{ex:'EX019',s:3,r:15,rpe:5}]}},
+'HV04':{name:'Iron Volume Pro',cat:'HV',goal:'Professional hypertrophy training',weeks:12,days:5,sessions:{1:[{ex:'EX001',s:5,r:8,rpe:7},{ex:'EX024',s:4,r:12,rpe:6}],2:[{ex:'EX011',s:5,r:8,rpe:7},{ex:'EX026',s:4,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX009',s:4,r:10,rpe:6}],4:[{ex:'EX006',s:5,r:8,rpe:7},{ex:'EX021',s:4,r:12,rpe:6}],5:[{ex:'EX014',s:4,r:12,rpe:6},{ex:'EX022',s:3,r:15,rpe:5}]}},
+'HV05':{name:'Chest Authority',cat:'HV',goal:'Chest specialization',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:8,rpe:7},{ex:'EX002',s:3,r:10,rpe:6},{ex:'EX024',s:3,r:15,rpe:5}],2:[{ex:'EX005',s:4,r:10,rpe:6},{ex:'EX023',s:3,r:12,rpe:5}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX014',s:3,r:10,rpe:6}],4:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX021',s:3,r:12,rpe:6}]}},
+'HV06':{name:'Back Authority',cat:'HV',goal:'Back development mastery',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:8,rpe:7},{ex:'EX005',s:3,r:10,rpe:6}],2:[{ex:'EX011',s:4,r:8,rpe:7},{ex:'EX026',s:3,r:12,rpe:5}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX009',s:4,r:10,rpe:6},{ex:'EX014',s:3,r:12,rpe:5}],4:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX022',s:3,r:15,rpe:5}]}},
+'HV07':{name:'Arm Expansion',cat:'HV',goal:'Complete arm development',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:3,r:8,rpe:7},{ex:'EX024',s:3,r:12,rpe:6}],2:[{ex:'EX011',s:3,r:8,rpe:7},{ex:'EX025',s:3,r:15,rpe:5}],3:[{ex:'EX017',s:4,r:8,rpe:7},{ex:'EX019',s:4,r:12,rpe:6},{ex:'EX018',s:3,r:10,rpe:6}],4:[{ex:'EX006',s:3,r:8,rpe:7},{ex:'EX020',s:3,r:15,rpe:5}]}},
+'HV08':{name:'Delt Domination',cat:'HV',goal:'Shoulder specialization',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:8,rpe:7},{ex:'EX024',s:3,r:12,rpe:5}],2:[{ex:'EX011',s:4,r:8,rpe:7},{ex:'EX026',s:3,r:12,rpe:5}],3:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX021',s:4,r:12,rpe:6},{ex:'EX022',s:3,r:15,rpe:5}],4:[{ex:'EX008',s:3,r:10,rpe:6},{ex:'EX023',s:3,r:12,rpe:5}]}},
+'HV09':{name:'Leg Mass',cat:'HV',goal:'Lower body hypertrophy',weeks:12,days:4,sessions:{1:[{ex:'EX011',s:4,r:8,rpe:7},{ex:'EX013',s:3,r:10,rpe:6},{ex:'EX025',s:4,r:15,rpe:5}],2:[{ex:'EX012',s:4,r:8,rpe:7},{ex:'EX026',s:4,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:6,rpe:7},{ex:'EX014',s:3,r:10,rpe:6}],4:[{ex:'EX006',s:4,r:8,rpe:7},{ex:'EX021',s:3,r:12,rpe:6}]}},
+'HV10':{name:'Iron Density',cat:'HV',goal:'Metabolic stress accumulation',weeks:12,days:4,sessions:{1:[{ex:'EX001',s:4,r:12,rpe:6},{ex:'EX024',s:4,r:15,rpe:5}],2:[{ex:'EX011',s:4,r:12,rpe:6},{ex:'EX026',s:4,r:15,rpe:5}],3:[{ex:'EX010',s:4,r:8,rpe:6},{ex:'EX009',s:4,r:12,rpe:6}],4:[{ex:'EX006',s:4,r:12,rpe:6},{ex:'EX022',s:4,r:15,rpe:5}]}},
+};
+
+const app={prog:null,timer:null,tsec:0,metrics:{sets:0,vol:0},selectedProgId:null,calcTab:'single',init(){this.loadProg();this.renderHome();if('serviceWorker'in navigator)navigator.serviceWorker.register('data:application/javascript,self.addEventListener("install",e=>self.skipWaiting());self.addEventListener("activate",e=>self.clients.matchAll().then(c=>c.forEach(x=>x.navigate(x.url))));')},nav(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));const s=document.getElementById(id);if(s)s.classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const ni=document.querySelector(`[data-page="${id}"]`);if(ni)ni.classList.add('active');if(id==='programs')this.renderPrograms();if(id==='exercises')this.renderExercises();if(id==='workout')this.renderWorkout()},switchCalcTab(tab){this.calcTab=tab;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');document.getElementById('calc-single').style.display=tab==='single'?'block':'none';document.getElementById('calc-compare').style.display=tab==='compare'?'block':'none'},calculateSingleRM(){const w=parseFloat(document.getElementById('rm-weight').value);const r=parseInt(document.getElementById('rm-reps').value);const method=document.getElementById('rm-formula').value;if(!w||!r||r<1||w<=0){alert('Enter valid weight and reps');return}const calc=rmCalculator[method];const rm=calc(w,r).toFixed(1);const formula=rmFormulas[method];document.getElementById('result-value').textContent=rm+'kg';document.getElementById('result-label').textContent='1RM Estimate';document.getElementById('result-method').textContent=formula.name+' • '+formula.desc;let details=`<strong>${formula.name}:</strong><br>${formula.formula}<br><br><strong>Your Numbers:</strong><br>Weight: ${w}kg • Reps: ${r}<br>Result: ${rm}kg`;document.getElementById('formula-details').innerHTML=details;document.getElementById('single-result').style.display='block'},calculateAllRM(){const w=parseFloat(document.getElementById('comp-rm-weight').value);const r=parseInt(document.getElementById('comp-rm-reps').value);if(!w||!r||r<1||w<=0){alert('Enter valid weight and reps');return}let results={};let sum=0;Object.entries(rmCalculator).forEach(([key,calc])=>{const rm=calc(w,r).toFixed(1);results[key]=rm;sum+=parseFloat(rm)});const avg=(sum/7).toFixed(1);document.getElementById('avg-rm').textContent=avg+'kg';let html='';const methods=['epley','brzycki','lombardini','mayhew','landers','oconner','wathan'];methods.forEach(m=>{const name=rmFormulas[m].name;const val=results[m];html+=`<div class="rm-item"><span class="rm-method-name">${name}</span><span class="rm-method-value">${val}kg</span></div>`});document.getElementById('methods-comparison').innerHTML=html;document.getElementById('compare-result').style.display='block'},renderHome(){const noProg=document.getElementById('no-prog');const activeProg=document.getElementById('active-prog');if(!this.prog||this.prog.state!=='Active'){if(noProg)noProg.style.display='block';if(activeProg)activeProg.style.display='none'}else{if(noProg)noProg.style.display='none';if(activeProg)activeProg.style.display='block';const pct=Math.round((this.prog.done/this.prog.total)*100);document.getElementById('prog-name').textContent=this.prog.name;document.getElementById('prog-goal').textContent=this.prog.goal||'';document.getElementById('pw').textContent=this.prog.week;document.getElementById('pd').textContent=this.prog.day;document.getElementById('pdn').textContent=this.prog.done;document.getElementById('ppc').textContent=pct+'%';document.getElementById('pb').style.width=pct+'%'}},renderPrograms(){const cats=['PB','SV','HV'];this.filterCat(cats[0])},filterCat(cat){const grid=document.getElementById('prog-grid-all');let html='';Object.entries(PROTS).forEach(([id,p])=>{if(p.cat===cat)html+=`<div class="vault" onclick="app.showProgram('${id}')"><div class="vault-name">${p.name}</div><div class="vault-goal">${p.goal.substring(0,28)}...</div><div class="vault-id">${id} • ${p.weeks}w • ${p.days}d</div></div>`});grid.innerHTML=html},showProgram(id){this.selectedProgId=id;const p=PROTS[id];if(!p)return;const ptit=document.getElementById('ptit');const pbdy=document.getElementById('pbdy');ptit.textContent=p.name;let h=`<div style="margin-bottom:14px"><div style="font-size:9px;color:#aaa;margin-bottom:6px;line-height:1.4">${p.goal}</div><div style="font-size:9px;color:#666;margin-top:6px">${id} • ${p.weeks}w • ${p.days}d/wk</div></div>`;for(let w=1;w<=Math.min(3,p.weeks);w++){h+=`<div style="background:rgba(0,217,255,.08);border-left:3px solid rgba(0,217,255,.3);padding:10px;margin-bottom:8px;border-radius:6px"><div style="font-weight:bold;color:#00D9FF;font-size:10px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;font-family:'Space Mono'">Week ${w}</div>`;for(let d=1;d<=p.days;d++){const el=p.sessions[d]||[];const et=el.map(e=>EX_DB[e.ex]?.name||'Ex').slice(0,2).join(', ');h+=`<div style="background:rgba(0,217,255,.05);padding:6px;margin-bottom:3px;border-radius:3px;font-size:8px;border-left:2px solid rgba(0,217,255,.2)"><span style="color:#00D9FF;font-weight:bold;font-family:'Space Mono';font-size:9px;text-transform:uppercase">Day ${d}</span><div style="color:#bbb;font-size:8px;margin-top:2px;line-height:1.3">${et}${el.length>2?'...':''}</div></div>`}h+=`</div>`}pbdy.innerHTML=h;document.getElementById('prev').classList.add('active')},activateProgram(){if(!this.selectedProgId)return;const p=PROTS[this.selectedProgId];if(!p||!p.sessions)return;this.prog={id:this.selectedProgId,name:p.name,goal:p.goal,days:p.days,weeks:p.weeks,sessions:JSON.parse(JSON.stringify(p.sessions)),state:'Active',week:1,day:1,done:0,total:p.weeks*p.days};this.saveProg();this.renderHome();this.closeModal('prev');alert('✅ '+p.name+' activated!')},renderExercises(){const search=document.getElementById('search')?document.getElementById('search').value.toLowerCase():'';const list=document.getElementById('exlist');const count=document.getElementById('search-count');let html='';let found=0;Object.entries(EX_DB).forEach(([id,e])=>{if(e.name.toLowerCase().includes(search)){html+=`<div class="ex-item" onclick="app.showExercise('${id}')"><div class="ex-left"><div class="ex-name">${e.name}</div><div class="ex-info">${e.primary}</div></div><div style="color:#00D9FF;font-size:12px">→</div></div>`;found++}});count.textContent=found===0?'No results':found+' exercises';list.innerHTML=html||'<p style="color:#666;text-align:center;padding:20px;font-style:italic">No exercises found</p>'},searchEx(){this.renderExercises()},showExercise(id){const ex=EX_DB[id];if(!ex)return;const title=document.getElementById('ex-title');const content=document.getElementById('ex-content');title.textContent=ex.name;let h=`<div style="margin-bottom:14px"><div style="font-size:9px;color:#aaa;margin-bottom:8px"><strong style="color:#00D9FF">Primary:</strong> ${ex.primary}</div><div style="font-size:9px;color:#aaa;margin-bottom:8px"><strong style="color:#00D9FF">Secondary:</strong> ${ex.secondary}</div><div style="font-size:9px;color:#aaa;margin-bottom:8px"><strong style="color:#00D9FF">Category:</strong> ${ex.category}</div><div style="font-size:9px;color:#aaa;margin-bottom:8px"><strong style="color:#00D9FF">Goal:</strong> ${ex.goal}</div><div style="font-size:9px;color:#aaa;margin-bottom:8px"><strong style="color:#00D9FF">Recovery Cost:</strong> ${ex.recovery}</div></div>`;h+=`<div style="background:rgba(0,217,255,.08);border-left:3px solid #00D9FF;padding:12px;border-radius:8px;margin-bottom:12px"><div style="font-weight:bold;color:#00D9FF;font-size:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;font-family:'Space Mono'">Recommended Techniques</div><div style="font-size:9px;color:#bbb;line-height:1.6">${ex.techniques.join(' • ')}</div></div>`;h+=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><div style="background:rgba(0,217,255,.1);border:1px solid rgba(0,217,255,.2);padding:8px;border-radius:6px;text-align:center"><div style="font-size:14px;font-weight:bold;color:#00D9FF;font-family:'Space Mono'">${ex.fatigue}/5</div><div style="font-size:8px;color:#888;text-transform:uppercase;margin-top:2px">Fatigue</div></div><div style="background:rgba(0,217,255,.1);border:1px solid rgba(0,217,255,.2);padding:8px;border-radius:6px;text-align:center"><div style="font-size:14px;font-weight:bold;color:#00D9FF;font-family:'Space Mono'">${ex.skill}/5</div><div style="font-size:8px;color:#888;text-transform:uppercase;margin-top:2px">Skill</div></div><div style="background:rgba(0,217,255,.1);border:1px solid rgba(0,217,255,.2);padding:8px;border-radius:6px;text-align:center"><div style="font-size:12px;font-weight:bold;color:#00D9FF;font-family:'Space Mono'">⭐</div><div style="font-size:8px;color:#888;text-transform:uppercase;margin-top:2px">Elite</div></div></div>`;content.innerHTML=h;document.getElementById('exmodal').classList.add('active')},renderWorkout(){if(!this.prog)return;const exercises=this.prog.sessions[this.prog.day]||[];document.getElementById('wtit').textContent=this.prog.name;document.getElementById('wmeta').textContent=`Week ${this.prog.week} • Day ${this.prog.day} • ${exercises.length} Exercises`;let h='';exercises.forEach((exData,i)=>{const exName=EX_DB[exData.ex]?.name||'Unknown';const s=exData.s||4;const r=exData.r||8;const rpe=exData.rpe||7;h+=`<div style="margin-bottom:10px"><div style="background:linear-gradient(135deg,rgba(0,217,255,.1),rgba(0,191,255,.05));border:1px solid rgba(0,217,255,.25);border-radius:8px;padding:10px;margin-bottom:10px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;align-items:center;box-shadow:0 4px 12px rgba(0,217,255,.1)"><input type="number" id="w${i}" placeholder="Weight" style="font-weight:bold;margin:0;font-size:10px;padding:8px;background:rgba(10,10,20,.8);border:1px solid rgba(0,217,255,.3)"><input type="number" id="rep${i}" placeholder="Reps" style="margin:0;font-size:10px;padding:8px;background:rgba(10,10,20,.8);border:1px solid rgba(0,217,255,.3)"><input type="number" id="rpe${i}" placeholder="RPE" step=".5" style="margin:0;font-size:10px;padding:8px;background:rgba(10,10,20,.8);border:1px solid rgba(0,217,255,.3)"><button class="btn" onclick="app.logSet(${i})" style="padding:8px;font-size:10px;margin:0">LOG</button></div><div class="ex-detail">${s}×${r} @ RPE ${rpe}</div><div style="font-size:10px;color:#00D9FF;font-family:'Space Mono';font-weight:bold;text-align:center;margin-top:4px;text-transform:uppercase">${exName}</div></div>`});document.getElementById('exwl').innerHTML=h;this.metrics={sets:0,vol:0};this.updateMetrics();this.startTimer()},logSet(i){const w=parseFloat(document.getElementById(`w${i}`).value)||0;const r=parseInt(document.getElementById(`rep${i}`).value)||0;if(w&&r){this.metrics.sets++;this.metrics.vol+=w*r;this.updateMetrics();document.getElementById(`w${i}`).value='';document.getElementById(`rep${i}`).value='';document.getElementById(`rpe${i}`).value=''}},updateMetrics(){document.getElementById('sets-count').textContent=this.metrics.sets;document.getElementById('vol-count').textContent=this.metrics.vol+'kg'},startTimer(){this.tsec=0;clearInterval(this.timer);this.timer=setInterval(()=>{this.tsec++;const m=Math.floor(this.tsec/60);const s=this.tsec%60;document.getElementById('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`},1000)},completeWorkout(){clearInterval(this.timer);if(!this.prog)return;this.prog.done++;this.prog.day++;if(this.prog.day>this.prog.days){this.prog.day=1;this.prog.week++}this.saveProg();this.renderHome();alert('✅ Workout completed!');this.nav('home')},menu(){const menu=document.getElementById('menu');if(menu){menu.classList.add('active');const pbtn=document.getElementById('pbtn');const rbtn=document.getElementById('rbtn');const dbtn=document.getElementById('dbtn');if(this.prog&&this.prog.state==='Active'){pbtn.style.display='block';rbtn.style.display='none';dbtn.style.display='block'}else if(this.prog&&this.prog.state==='Paused'){pbtn.style.display='none';rbtn.style.display='block';dbtn.style.display='block'}else{pbtn.style.display='none';rbtn.style.display='none';dbtn.style.display='none'}}},toggleMenu(){this.menu()},pauseProg(){if(this.prog)this.prog.state='Paused';this.saveProg();this.renderHome();this.closeModal('menu')},resumeProg(){if(this.prog)this.prog.state='Active';this.saveProg();this.renderHome();this.closeModal('menu')},deactivateProg(){if(this.prog)this.prog.state='Inactive';this.saveProg();this.renderHome();this.closeModal('menu')},closeModal(id){const modal=document.getElementById(id);if(modal)modal.classList.remove('active')},saveProg(){if(this.prog)localStorage.setItem('iron_prog',JSON.stringify(this.prog))},loadProg(){const s=localStorage.getItem('iron_prog');if(s){try{this.prog=JSON.parse(s)}catch(e){this.prog=null}}}};
+
+window.addEventListener('DOMContentLoaded',()=>app.init());
+</script>
+</body>
+</html>
